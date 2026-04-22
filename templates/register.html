@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TechNova - Register</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Jost', sans-serif;
+        }
+
+        .register-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 950px;
+        }
+
+        .register-left {
+            background: #0d6efd;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            min-height: 500px;
+        }
+
+        .register-left h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .register-left p {
+            color: rgba(255,255,255,0.85);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .register-left .features {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            width: 100%;
+        }
+
+        .register-left .features li {
+            padding: 8px 0;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .register-left .features li::before {
+            content: "⭐ ";
+        }
+
+        .register-right {
+            padding: 50px 40px;
+        }
+
+        .register-right h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        .register-right p.subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 11px 15px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.1);
+        }
+
+        .btn-register {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-register:hover {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #eee;
+            z-index: 0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #0d6efd;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .navbar-brand-text {
+            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: #1a1a2e;
+            text-decoration: none;
+        }
+
+        .navbar-brand-text span {
+            color: #0d6efd;
+        }
+
+        .top-nav {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-nav a.back {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .top-nav a.back:hover { color: #0d6efd; }
+
+        .password-hint {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .terms-text {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .terms-text a {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        .alert-error {
+            background: #fff5f5;
+            border: 1px solid #ffcccc;
+            color: #cc0000;
+            padding: 12px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #f0fff0;
+            border: 1px solid #ccffcc;
+            color: #006600;
+            padding: 12px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAV -->
+    <div class="top-nav">
+        <a href="/" class="navbar-brand-text">TECH<span>NOVA</span></a>
+        <a href="/" class="back">← Back to Home</a>
+    </div>
+
+    <!-- REGISTER WRAPPER -->
+    <div class="register-wrapper">
+        <div class="register-card">
+            <div class="row g-0">
+
+                <!-- LEFT SIDE -->
+                <div class="col-lg-4 register-left">
+                    <div>
+                        <h2>Join<br>TechNova</h2>
+                        <p>Create your account and get access to amazing deals on electronics!</p>
+                        <ul class="features">
+                            <li>Free delivery on orders above ₹2000</li>
+                            <li>Exclusive member discounts</li>
+                            <li>Track all your orders</li>
+                            <li>Easy returns & refunds</li>
+                            <li>Wishlist & favourites</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE - REGISTER FORM -->
+                <div class="col-lg-8 register-right">
+                    <h3>Create Account</h3>
+                    <p class="subtitle">Fill in the details below to create your TechNova account</p>
+
+                    {% if error %}
+                    <div class="alert-error">
+                        ⚠️ {{ error }}
+                    </div>
+                    {% endif %}
+
+                    {% if success %}
+                    <div class="alert-success">
+                        ✅ {{ success }}
+                    </div>
+                    {% endif %}
+
+                    <!-- REGISTER FORM -->
+                    <form method="POST" action="/register">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input 
+                                    type="text" 
+                                    name="first_name" 
+                                    class="form-control" 
+                                    placeholder="Enter first name"
+                                    required
+                                >
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input 
+                                    type="text" 
+                                    name="last_name" 
+                                    class="form-control" 
+                                    placeholder="Enter last name"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                class="form-control" 
+                                placeholder="Enter your email address"
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input 
+                                type="tel" 
+                                name="phone" 
+                                class="form-control" 
+                                placeholder="Enter your phone number"
+                            >
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Password</label>
+                                <input 
+                                    type="password" 
+                                    name="password1" 
+                                    class="form-control" 
+                                    placeholder="Create a password"
+                                    required
+                                >
+                                <p class="password-hint">Minimum 8 characters</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input 
+                                    type="password" 
+                                    name="password2" 
+                                    class="form-control" 
+                                    placeholder="Confirm your password"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label terms-text" for="terms">
+                                    I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-register">
+                            Create My Account
+                        </button>
+
+                    </form>
+
+                    <div class="divider"><span>OR</span></div>
+
+                    <div class="login-link">
+                        Already have an account? 
+                        <a href="/login">Login Here</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

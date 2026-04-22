@@ -1,0 +1,956 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TechNova - Products</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f1b35;
+            --accent: #0057ff;
+            --accent2: #00c2ff;
+            --bg: #f0f3f8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: #1a1a2e;
+            font-size: 14px;
+        }
+
+        /* ═══════════════════════════ HEADER ═══════════════════════════ */
+        .site-header {
+            background: var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .brand {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .brand span { color: var(--accent2); }
+
+        .search-bar {
+            flex: 1;
+            max-width: 600px;
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--accent2);
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 10px 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        .search-bar button {
+            background: var(--accent2);
+            border: none;
+            padding: 10px 18px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .hdr-btn {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.2s;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .hdr-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        .hdr-btn.cart {
+            background: var(--accent2);
+            border-color: var(--accent2);
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .hdr-btn.cart:hover { background: white; }
+
+        .badge-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc2626;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+        .hdr-btn.cart .badge-count {
+            background: var(--primary);
+            top: -3px;
+            right: -3px;
+        }
+
+        /* nav bar */
+        .nav-bar {
+            background: rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .nav-bar ul {
+            list-style: none;
+            display: flex;
+            gap: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-bar a {
+            display: block;
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+
+        .nav-bar a:hover, .nav-bar a.active { color: var(--accent2); }
+
+        /* User dropdown */
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1001;
+            min-width: 150px;
+            display: none;
+        }
+
+        .user-dropdown.show { display: block; }
+
+        .user-dropdown a {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-dropdown a:last-child {
+            border-bottom: none;
+            color: #dc3545;
+        }
+
+        .user-dropdown a:hover { background: #f8f9fa; }
+
+        .wishlist-btn.wishlisted {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-cart.added {
+            background: #16a34a;
+            color: white;
+            cursor: default;
+        }
+
+        /* 4 Column Grid Layout */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1200px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Product Card Styles */
+        .pcard {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            height: fit-content;
+        }
+        .pcard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .pcard .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+        .pcard .badge-new {
+            background: linear-gradient(135deg, #00c2ff, #0057ff);
+            color: white;
+        }
+        .pcard .badge-hot {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+        .pcard .badge-sale {
+            background: linear-gradient(135deg, #26de81, #20bf6b);
+            color: white;
+        }
+
+        .pcard .wishlist-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            min-width: 70px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+            text-decoration: none;
+        }
+        .pcard .wishlist-btn:hover {
+            background: #ff4757;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .pcard-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f5f5f5;
+        }
+
+        .pcard-body {
+            padding: 15px;
+        }
+
+        .pcard-cat {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .pcard-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .assured-badge {
+            font-size: 11px;
+            color: var(--accent2);
+            margin-bottom: 8px;
+        }
+
+        .pcard-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .pcard-rating .stars {
+            color: #ffc107;
+            font-size: 12px;
+        }
+        .pcard-rating .rating-count {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .pcard-specs {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 11px;
+        }
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+        .spec-key {
+            color: #888;
+            font-weight: 500;
+        }
+        .spec-val {
+            color: #1a1a2e;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .pcard-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        .pcard-highlights .tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .pcard-price-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .pcard-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        .pcard-mrp {
+            font-size: 12px;
+            color: #888;
+            text-decoration: line-through;
+        }
+        .pcard-discount {
+            font-size: 12px;
+            color: #26de81;
+            font-weight: 600;
+        }
+
+        .pcard-delivery {
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        .pcard-delivery span {
+            color: #1a1a2e;
+            font-weight: 500;
+        }
+
+        .pcard-emi {
+            font-size: 11px;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .btn-cart {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-cart:hover {
+            background: var(--accent2);
+            color: white;
+        }
+
+        .bank-offer {
+            font-size: 10px;
+            color: #0066cc;
+            background: #e3f2fd;
+            padding: 5px 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .product-section {
+            padding: 30px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .section-header h2 {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0;
+        }
+        .section-header a {
+            color: var(--accent2);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--accent2) 0%, var(--primary) 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px 40px;
+            margin-top: 50px;
+        }
+        .page-header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin: 0 0 10px;
+        }
+        .page-header p {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.7);
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 60px 30px 20px;
+            margin-top: 60px;
+        }
+
+        .footer-inner {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-brand {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8em;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .footer-brand span {
+            color: var(--accent2);
+        }
+
+        footer h5 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        footer a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            padding: 6px 0;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+        footer a:hover {
+            color: var(--accent2);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media (max-width: 900px) {
+            .footer-inner {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ UNIFIED NAVBAR ═══════════════════════════ -->
+<header class="site-header">
+    <div class="header-top">
+        <a href="/" class="brand">TECH<span>NOVA</span></a>
+        <div class="search-bar">
+            <input type="text" placeholder="Search for laptops, phones, headphones...">
+            <button>🔍</button>
+        </div>
+        <div class="header-actions">
+            {% if request.session.customer_id %}
+            <a href="/cart" class="hdr-btn cart">🛒 Cart{% if cart_count > 0 %} <span class="badge-count">{{ cart_count }}</span>{% endif %}</a>
+            <a href="/wishlist" class="hdr-btn">♡ Wishlist{% if wishlist_count > 0 %} <span class="badge-count">{{ wishlist_count }}</span>{% endif %}</a>
+            <a href="/orders" class="hdr-btn">📦 Orders</a>
+            <a href="#" class="hdr-btn" onclick="event.preventDefault(); document.getElementById('userMenu').classList.toggle('show');">👤 {{ request.session.customer_name }}</a>
+            <div id="userMenu" class="user-dropdown">
+                <a href="/cart">🛒 My Cart</a>
+                <a href="/wishlist">♡ My Wishlist</a>
+                <a href="/orders">📦 My Orders</a>
+                <a href="/logout">🚪 Logout</a>
+            </div>
+            {% else %}
+            <a href="/login" class="hdr-btn">Login</a>
+            <a href="/register" class="hdr-btn">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    <nav class="nav-bar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products" class="active">Products</a></li>
+            <li><a href="/products#laptops">Laptops</a></li>
+            <li><a href="/products#phones">Phones</a></li>
+            <li><a href="/products#headphones">Headphones</a></li>
+            <li><a href="/products#watches">Watches</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="page-header">
+    <h1>🛍️ Shop Products</h1>
+    <p>Discover the latest in technology</p>
+</div>
+
+<!-- ═══════════════════════════ DATABASE PRODUCTS - LAPTOPS ═══════════════════════════ -->
+{% if laptops %}
+<section class="product-section" id="laptops">
+    <div class="section-header">
+        <h2>💻 Laptops</h2>
+        <a href="#">View All →</a>
+    </div>
+    <div class="products-grid">
+        {% for product in laptops %}
+        <div class="pcard">
+            {% if product.is_new %}
+            <span class="badge badge-new">New</span>
+            {% endif %}
+            <a href="/add-to-wishlist/{{ product.id }}" class="wishlist-btn{% if product.id|stringformat:"i" in wishlist_product_ids %} wishlisted{% endif %}" title="{% if product.id|stringformat:"i" in wishlist_product_ids %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">{% if product.id|stringformat:"i" in wishlist_product_ids %}♥ Added{% else %}<span style="font-size:14px;">♡</span> Add{% endif %}</a>
+            {% if product.image %}
+            <img src="{{ MEDIA_URL }}{{ product.image }}" alt="{{ product.name }}" class="pcard-img">
+            {% else %}
+            <img src="/static/images/no-image.jpg" alt="{{ product.name }}" class="pcard-img">
+            {% endif %}
+            <div class="pcard-body">
+                <div class="pcard-cat">{{ product.category }}</div>
+                <div class="pcard-name">{{ product.name }}</div>
+                {% if product.is_assured %}
+                <div class="assured-badge">✔ TechNova Assured</div>
+                {% endif %}
+                <div class="pcard-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="rating-count">{{ product.rating }} ({{ product.rating_count }} ratings)</span>
+                </div>
+                {% if product.processor or product.ram or product.storage %}
+                <div class="pcard-specs">
+                    {% if product.processor %}<div class="spec-row"><span class="spec-key">Processor</span><span class="spec-val">{{ product.processor }}</span></div>{% endif %}
+                    {% if product.ram %}<div class="spec-row"><span class="spec-key">RAM</span><span class="spec-val">{{ product.ram }}</span></div>{% endif %}
+                    {% if product.storage %}<div class="spec-row"><span class="spec-key">Storage</span><span class="spec-val">{{ product.storage }}</span></div>{% endif %}
+                    {% if product.display %}<div class="spec-row"><span class="spec-key">Display</span><span class="spec-val">{{ product.display }}</span></div>{% endif %}
+                    {% if product.graphics %}<div class="spec-row"><span class="spec-key">Graphics</span><span class="spec-val">{{ product.graphics }}</span></div>{% endif %}
+                    {% if product.battery %}<div class="spec-row"><span class="spec-key">Battery</span><span class="spec-val">{{ product.battery }}</span></div>{% endif %}
+                    {% if product.os %}<div class="spec-row"><span class="spec-key">OS</span><span class="spec-val">{{ product.os }}</span></div>{% endif %}
+                    {% if product.weight %}<div class="spec-row"><span class="spec-key">Weight</span><span class="spec-val">{{ product.weight }}</span></div>{% endif %}
+                </div>
+                {% endif %}
+                {% if product.features %}
+                <div class="pcard-highlights">
+                    {% for feature in product.get_features_list %}
+                    <span class="tag">{{ feature }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="pcard-price-wrap">
+                    <span class="pcard-price">₹{{ product.price|floatformat:0 }}</span>
+                    {% if product.original_price %}
+                    <span class="pcard-mrp">₹{{ product.original_price|floatformat:0 }}</span>
+                    <span class="pcard-discount">{{ product.discount_percentage }}% off</span>
+                    {% endif %}
+                </div>
+                <div class="pcard-delivery">🚚 <span>Free delivery by Tomorrow · In Stock</span></div>
+                <div class="pcard-emi"><strong>EMI from ₹2,500/month</strong> · No Cost EMI available</div>
+                <div class="pcard-actions">
+                    <a href="/add-to-cart/{{ product.id }}" class="btn-cart{% if product.id|stringformat:"i" in cart_product_ids %} added{% endif %}">
+                        {% if product.id|stringformat:"i" in cart_product_ids %}✓ Already Added{% else %}Add to Cart{% endif %}
+                    </a>
+                </div>
+                {% if product.offer_text %}
+                <div class="bank-offer">{{ product.offer_text }}</div>
+                {% else %}
+                <div class="bank-offer">10% off with HDFC / ICICI cards</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════════════════ DATABASE PRODUCTS - PHONES ═══════════════════════════ -->
+{% if mobile_phones %}
+<section class="product-section" id="phones">
+    <div class="section-header">
+        <h2>📱 Mobile Phones</h2>
+        <a href="#">View All →</a>
+    </div>
+    <div class="products-grid">
+        {% for product in mobile_phones %}
+        <div class="pcard">
+            {% if product.is_new %}
+            <span class="badge badge-new">New</span>
+            {% endif %}
+            <a href="/add-to-wishlist/{{ product.id }}" class="wishlist-btn{% if product.id|stringformat:"i" in wishlist_product_ids %} wishlisted{% endif %}" title="{% if product.id|stringformat:"i" in wishlist_product_ids %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">{% if product.id|stringformat:"i" in wishlist_product_ids %}♥ Added{% else %}<span style="font-size:14px;">♡</span> Add{% endif %}</a>
+            {% if product.image %}
+            <img src="{{ MEDIA_URL }}{{ product.image }}" alt="{{ product.name }}" class="pcard-img">
+            {% else %}
+            <img src="/static/images/no-image.jpg" alt="{{ product.name }}" class="pcard-img">
+            {% endif %}
+            <div class="pcard-body">
+                <div class="pcard-cat">{{ product.category }}</div>
+                <div class="pcard-name">{{ product.name }}</div>
+                {% if product.is_assured %}
+                <div class="assured-badge">✔ TechNova Assured</div>
+                {% endif %}
+                <div class="pcard-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="rating-count">{{ product.rating }} ({{ product.rating_count }} ratings)</span>
+                </div>
+                {% if product.processor or product.ram or product.storage %}
+                <div class="pcard-specs">
+                    {% if product.processor %}<div class="spec-row"><span class="spec-key">Processor</span><span class="spec-val">{{ product.processor }}</span></div>{% endif %}
+                    {% if product.ram %}<div class="spec-row"><span class="spec-key">RAM</span><span class="spec-val">{{ product.ram }}</span></div>{% endif %}
+                    {% if product.storage %}<div class="spec-row"><span class="spec-key">Storage</span><span class="spec-val">{{ product.storage }}</span></div>{% endif %}
+                    {% if product.display %}<div class="spec-row"><span class="spec-key">Display</span><span class="spec-val">{{ product.display }}</span></div>{% endif %}
+                    {% if product.battery %}<div class="spec-row"><span class="spec-key">Battery</span><span class="spec-val">{{ product.battery }}</span></div>{% endif %}
+                    {% if product.os %}<div class="spec-row"><span class="spec-key">OS</span><span class="spec-val">{{ product.os }}</span></div>{% endif %}
+                </div>
+                {% endif %}
+                {% if product.features %}
+                <div class="pcard-highlights">
+                    {% for feature in product.get_features_list %}
+                    <span class="tag">{{ feature }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="pcard-price-wrap">
+                    <span class="pcard-price">₹{{ product.price|floatformat:0 }}</span>
+                    {% if product.original_price %}
+                    <span class="pcard-mrp">₹{{ product.original_price|floatformat:0 }}</span>
+                    <span class="pcard-discount">{{ product.discount_percentage }}% off</span>
+                    {% endif %}
+                </div>
+                <div class="pcard-delivery">🚚 <span>Free delivery by Today · In Stock</span></div>
+                <div class="pcard-emi"><strong>EMI from ₹2,500/month</strong> · No Cost EMI available</div>
+                <div class="pcard-actions">
+                    <a href="/add-to-cart/{{ product.id }}" class="btn-cart{% if product.id|stringformat:"i" in cart_product_ids %} added{% endif %}">
+                        {% if product.id|stringformat:"i" in cart_product_ids %}✓ Already Added{% else %}Add to Cart{% endif %}
+                    </a>
+                </div>
+                {% if product.offer_text %}
+                <div class="bank-offer">{{ product.offer_text }}</div>
+                {% else %}
+                <div class="bank-offer">10% off with HDFC / ICICI cards</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════════════════ DATABASE PRODUCTS - HEADPHONES ═══════════════════════════ -->
+{% if headphones %}
+<section class="product-section" id="headphones">
+    <div class="section-header">
+        <h2>🎧 Headphones</h2>
+        <a href="#">View All →</a>
+    </div>
+    <div class="products-grid">
+        {% for product in headphones %}
+        <div class="pcard">
+            {% if product.is_new %}
+            <span class="badge badge-new">New</span>
+            {% endif %}
+            <a href="/add-to-wishlist/{{ product.id }}" class="wishlist-btn{% if product.id|stringformat:"i" in wishlist_product_ids %} wishlisted{% endif %}" title="{% if product.id|stringformat:"i" in wishlist_product_ids %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">{% if product.id|stringformat:"i" in wishlist_product_ids %}♥ Added{% else %}<span style="font-size:14px;">♡</span> Add{% endif %}</a>
+            {% if product.image %}
+            <img src="{{ MEDIA_URL }}{{ product.image }}" alt="{{ product.name }}" class="pcard-img">
+            {% else %}
+            <img src="/static/images/no-image.jpg" alt="{{ product.name }}" class="pcard-img">
+            {% endif %}
+            <div class="pcard-body">
+                <div class="pcard-cat">{{ product.category }}</div>
+                <div class="pcard-name">{{ product.name }}</div>
+                {% if product.is_assured %}
+                <div class="assured-badge">✔ TechNova Assured</div>
+                {% endif %}
+                <div class="pcard-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="rating-count">{{ product.rating }} ({{ product.rating_count }} ratings)</span>
+                </div>
+                {% if product.processor or product.ram or product.storage %}
+                <div class="pcard-specs">
+                    {% if product.processor %}<div class="spec-row"><span class="spec-key">Driver Size</span><span class="spec-val">{{ product.processor }}</span></div>{% endif %}
+                    {% if product.ram %}<div class="spec-row"><span class="spec-key">ANC</span><span class="spec-val">{{ product.ram }}</span></div>{% endif %}
+                    {% if product.storage %}<div class="spec-row"><span class="spec-key">Frequency</span><span class="spec-val">{{ product.storage }}</span></div>{% endif %}
+                    {% if product.battery %}<div class="spec-row"><span class="spec-key">Battery</span><span class="spec-val">{{ product.battery }}</span></div>{% endif %}
+                </div>
+                {% endif %}
+                {% if product.features %}
+                <div class="pcard-highlights">
+                    {% for feature in product.get_features_list %}
+                    <span class="tag">{{ feature }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="pcard-price-wrap">
+                    <span class="pcard-price">₹{{ product.price|floatformat:0 }}</span>
+                    {% if product.original_price %}
+                    <span class="pcard-mrp">₹{{ product.original_price|floatformat:0 }}</span>
+                    <span class="pcard-discount">{{ product.discount_percentage }}% off</span>
+                    {% endif %}
+                </div>
+                <div class="pcard-delivery">🚚 <span>Free delivery by Tomorrow · In Stock</span></div>
+                <div class="pcard-emi"><strong>EMI from ₹800/month</strong> · No Cost EMI available</div>
+                <div class="pcard-actions">
+                    <a href="/add-to-cart/{{ product.id }}" class="btn-cart{% if product.id|stringformat:"i" in cart_product_ids %} added{% endif %}">
+                        {% if product.id|stringformat:"i" in cart_product_ids %}✓ Already Added{% else %}Add to Cart{% endif %}
+                    </a>
+                </div>
+                {% if product.offer_text %}
+                <div class="bank-offer">{{ product.offer_text }}</div>
+                {% else %}
+                <div class="bank-offer">10% off with HDFC Bank Cards</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════════════════ DATABASE PRODUCTS - WATCHES ═══════════════════════════ -->
+{% if watches %}
+<section class="product-section" id="watches">
+    <div class="section-header">
+        <h2>⌚ Smart Watches</h2>
+        <a href="#">View All →</a>
+    </div>
+    <div class="products-grid">
+        {% for product in watches %}
+        <div class="pcard">
+            {% if product.is_new %}
+            <span class="badge badge-new">New</span>
+            {% endif %}
+            <a href="/add-to-wishlist/{{ product.id }}" class="wishlist-btn{% if product.id|stringformat:"i" in wishlist_product_ids %} wishlisted{% endif %}" title="{% if product.id|stringformat:"i" in wishlist_product_ids %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">{% if product.id|stringformat:"i" in wishlist_product_ids %}♥ Added{% else %}<span style="font-size:14px;">♡</span> Add{% endif %}</a>
+            {% if product.image %}
+            <img src="{{ MEDIA_URL }}{{ product.image }}" alt="{{ product.name }}" class="pcard-img">
+            {% else %}
+            <img src="/static/images/no-image.jpg" alt="{{ product.name }}" class="pcard-img">
+            {% endif %}
+            <div class="pcard-body">
+                <div class="pcard-cat">{{ product.category }}</div>
+                <div class="pcard-name">{{ product.name }}</div>
+                {% if product.is_assured %}
+                <div class="assured-badge">✔ TechNova Assured</div>
+                {% endif %}
+                <div class="pcard-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="rating-count">{{ product.rating }} ({{ product.rating_count }} ratings)</span>
+                </div>
+                {% if product.display or product.processor %}
+                <div class="pcard-specs">
+                    {% if product.display %}<div class="spec-row"><span class="spec-key">Display</span><span class="spec-val">{{ product.display }}</span></div>{% endif %}
+                    {% if product.processor %}<div class="spec-row"><span class="spec-key">Processor</span><span class="spec-val">{{ product.processor }}</span></div>{% endif %}
+                    {% if product.ram %}<div class="spec-row"><span class="spec-key">RAM / Storage</span><span class="spec-val">{{ product.ram }}</span></div>{% endif %}
+                    {% if product.battery %}<div class="spec-row"><span class="spec-key">Battery</span><span class="spec-val">{{ product.battery }}</span></div>{% endif %}
+                </div>
+                {% endif %}
+                {% if product.features %}
+                <div class="pcard-highlights">
+                    {% for feature in product.get_features_list %}
+                    <span class="tag">{{ feature }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="pcard-price-wrap">
+                    <span class="pcard-price">₹{{ product.price|floatformat:0 }}</span>
+                    {% if product.original_price %}
+                    <span class="pcard-mrp">₹{{ product.original_price|floatformat:0 }}</span>
+                    <span class="pcard-discount">{{ product.discount_percentage }}% off</span>
+                    {% endif %}
+                </div>
+                <div class="pcard-delivery">🚚 <span>Free delivery by Tomorrow · In Stock</span></div>
+                <div class="pcard-emi"><strong>EMI from ₹1,800/month</strong> · No Cost EMI available</div>
+                <div class="pcard-actions">
+                    <a href="/add-to-cart/{{ product.id }}" class="btn-cart{% if product.id|stringformat:"i" in cart_product_ids %} added{% endif %}">
+                        {% if product.id|stringformat:"i" in cart_product_ids %}✓ Already Added{% else %}Add to Cart{% endif %}
+                    </a>
+                </div>
+                {% if product.offer_text %}
+                <div class="bank-offer">{{ product.offer_text }}</div>
+                {% else %}
+                <div class="bank-offer">10% off with HDFC Bank Cards</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="site-footer text-white padding-large">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-sm-6 pb-3">
+                <div class="footer-menu">
+                    <h5 style="font-weight:900;font-size:1.4rem;letter-spacing:2px;">TECH<span style="color:#0d6efd;">NOVA</span></h5>
+                    <p class="mt-3">Your one-stop destination for premium electronics. Laptops, phones, headphones and watches.</p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-6 pb-3">
+                <div class="footer-menu text-uppercase">
+                    <h5 class="widget-title pb-2">Products</h5>
+                    <ul class="menu-list list-unstyled">
+                        <li class="pb-2"><a href="/products#laptops" class="text-white">Laptops</a></li>
+                        <li class="pb-2"><a href="/products#phones" class="text-white">Mobile Phones</a></li>
+                        <li class="pb-2"><a href="/products#headphones" class="text-white">Headphones</a></li>
+                        <li class="pb-2"><a href="/products#watches" class="text-white">Smart Watches</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-6 pb-3">
+                <div class="footer-menu text-uppercase">
+                    <h5 class="widget-title pb-2">Account</h5>
+                    <ul class="menu-list list-unstyled">
+                        <li class="pb-2"><a href="/login" class="text-white">Login</a></li>
+                        <li class="pb-2"><a href="/register" class="text-white">Register</a></li>
+                        <li class="pb-2"><a href="/orders" class="text-white">My Orders</a></li>
+                        <li class="pb-2"><a href="/wishlist" class="text-white">Wishlist</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 pb-3">
+                <div class="footer-menu">
+                    <h5 class="widget-title text-uppercase pb-2">Contact Us</h5>
+                    <p>📧 info@technova.com</p>
+                    <p>📞 +1 800 TECHNOVA</p>
+                    <p>📍 Tech City, TC 10001</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <p class="text-center">© 2026 TechNova Electronics. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="/static/js/jquery-1.11.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
